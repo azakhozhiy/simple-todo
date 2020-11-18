@@ -13,9 +13,6 @@ ini_set('display_startup_errors', 1);
 
 require __DIR__.'/../vendor/autoload.php';
 
-$session = new Session(new NativeSessionStorage());
-$session->start();
-
 /** @var Application $app */
 $app = require __DIR__.'/../bootstrap/app.php';
 
