@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Packages\Core\Engine;
 
 use App\Packages\Core\Database;
-use Cake\Database\Exception;
 use Closure;
+use RuntimeException;
 use TypeError;
 
 class Application
@@ -17,12 +19,50 @@ class Application
     protected array $instances = [];
     protected array $config = [];
 
+    /**
+     * Application constructor.
+     * @param  string  $basePath
+     * @param  array  $config
+     * @throws \Exception
+     */
     public function __construct(string $basePath, array $config)
     {
         $this->setBasePath($basePath);
         $this->config = $config;
 
+        $this->initDatabase($config);
+
         self::$instance = $this;
+    }
+
+    public function getDatabase(): Database
+    {
+        return $this->database;
+    }
+
+    /**
+     * @param  array  $config
+     * @throws RuntimeException
+     */
+    private function initDatabase(array $config): void
+    {
+        if (!isset($config['app'])) {
+            throw new RuntimeException('App config not found.');
+        }
+
+        $app_config = $config['app'];
+
+        $db_host = $app_config['db_host'] ?? null;
+        $db_user = $app_config['db_username'] ?? null;
+        $db_password = $app_config['db_password'] ?? null;
+        $db_port = $app_config['db_port'] ?? null;
+        $db_name = $app_config['db_database'] ?? null;
+
+        if (!$db_name || !$db_user || !$db_password || !$db_port || !$db_host) {
+            throw new RuntimeException('Invalid credentials for connection to database.');
+        }
+
+        $this->database = new Database($db_host, $db_port, $db_name, $db_user, $db_password);
     }
 
     public static function getInstance(): Application
@@ -61,6 +101,8 @@ class Application
 
     public function bind($abstract, $concrete = null, $shared = false): void
     {
+        $this->dropStaleInstances($abstract);
+
         if (is_null($concrete)) {
             $concrete = $abstract;
         }
@@ -119,6 +161,6 @@ class Application
             return $initialized;
         }
 
-        throw new Exception('Bind not exists.');
+        throw new RuntimeException('Bind not exists.');
     }
 }

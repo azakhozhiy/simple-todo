@@ -17,7 +17,7 @@ final class CreateFiles extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change(): void
+    public function up(): void
     {
         $table = $this->table('files');
 
@@ -37,5 +37,10 @@ final class CreateFiles extends AbstractMigration
             ->addIndex(['original_name'], ['unique' => true])
             ->addTimestamps()
             ->create();
+    }
+
+    public function down(): void
+    {
+        $this->table('files')->drop();
     }
 }

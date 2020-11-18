@@ -17,7 +17,7 @@ final class CreateTasks extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change(): void
+    public function up(): void
     {
         $table = $this->table('tasks');
 
@@ -47,5 +47,10 @@ final class CreateTasks extends AbstractMigration
             ->addIndex(['name'], ['unique' => true])
             ->addTimestamps()
             ->create();
+    }
+
+    public function down(): void
+    {
+        $this->table('tasks')->drop();
     }
 }

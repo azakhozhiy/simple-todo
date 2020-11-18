@@ -1,6 +1,7 @@
 <?php
 
 use App\Packages\Core\Engine\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!function_exists('app')) {
     /**
@@ -14,6 +15,13 @@ if (!function_exists('app')) {
         }
 
         return Application::getInstance()->make($abstract);
+    }
+}
+
+if (!function_exists('request')) {
+    function request(): Request
+    {
+        return Request::createFromGlobals();
     }
 }
 

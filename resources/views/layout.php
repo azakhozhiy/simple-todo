@@ -17,7 +17,7 @@
     <h3>Список задач</h3>
 
     <div class="section__content">
-
+      
     </div>
   </div>
 </section>
