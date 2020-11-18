@@ -17,16 +17,17 @@
     <h3>Список задач</h3>
 
     <div class="section__content">
-      <?php
-      while($row = $userQuery->fetch()){
-            echo $row['password'];
-      }
+        <?php
+        if ($taskQuery instanceof PDOStatement) {
+            while ($row = $taskQuery->fetch()) {
+                echo $row['title'];
+            }
+        }
 
-
-      ?>
+        ?>
     </div>
   </div>
 </section>
 
-<script src="<?php echo mix('/js/app.js') ?>">
+<script src="<?php echo mix('/js/app.js') ?>"></script>
 </html>

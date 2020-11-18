@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Packages\Core;
+declare(strict_types=1);
+
+namespace App\Packages\Core\Engine;
 
 use PDO;
 

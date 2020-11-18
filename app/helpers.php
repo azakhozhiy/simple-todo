@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Packages\Core\Engine\Application;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Packages\Core\Models;
 
 use PDO;
+use PDOStatement;
 
 abstract class BaseModel
 {
-    protected string $table;
-
     protected PDO $connection;
 
     public function __construct()
@@ -15,13 +16,23 @@ abstract class BaseModel
         $this->connection = app()->getDatabase()->getConnection();
     }
 
-    public function getConnection()
+    public static function getConnection(): PDO
     {
-        return $this->connection;
+        return (new static)->connection;
     }
 
-    public static function query(): PDO
+    /**
+     * @param  string|null  $sql
+     * @return false|PDOStatement
+     */
+    public static function query(?string $sql = null)
     {
-        return (new static)->getConnection();
+        $model = new static;
+
+        if ($sql) {
+            return $model->connection->query($sql);
+        }
+
+        return false;
     }
 }

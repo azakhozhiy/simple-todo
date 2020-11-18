@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Packages\Core\Repositories;
 
 use App\Packages\Core\Abstracts\CoreRepository;

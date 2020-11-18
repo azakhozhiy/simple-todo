@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Packages\Tasks;
+declare(strict_types=1);
+
+namespace App\Packages\Tasks\Models;
 
 use App\Packages\Core\Models\BaseModel;
-use App\Packages\Core\Models\User;
 
 class Task extends BaseModel
 {
     protected string $table = 'tasks';
-
-    public function user(): ?User
-    {
-
-    }
 }

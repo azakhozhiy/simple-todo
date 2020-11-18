@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Packages\Core\Engine;
 
-use App\Packages\Core\Database;
 use Closure;
 use RuntimeException;
 use TypeError;
