@@ -17,7 +17,13 @@
     <h3>Список задач</h3>
 
     <div class="section__content">
-      
+      <?php
+      while($row = $userQuery->fetch()){
+            echo $row['password'];
+      }
+
+
+      ?>
     </div>
   </div>
 </section>

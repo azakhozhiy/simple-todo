@@ -43,10 +43,43 @@ final class CreateTasks extends AbstractMigration
                     'update' => 'restrict',
                 ]
             )
-            ->addColumn('content', 'string', ['limit' => 100])
+            ->addColumn('content', 'string', ['limit' => 100, 'null' => true])
             ->addIndex(['name'], ['unique' => true])
             ->addTimestamps()
             ->create();
+
+        $tasks = [
+            [
+                'id' => 1,
+                'name' => 'task_1',
+                'title' => 'Таск 1',
+                'user_id' => 1,
+                'picture_id' => null,
+            ],
+            [
+                'id' => 2,
+                'name' => 'task_2',
+                'title' => 'Таск 2',
+                'user_id' => 1,
+                'picture_id' => null,
+            ],
+            [
+                'id' => 3,
+                'name' => 'task_3',
+                'title' => 'Таск 4',
+                'user_id' => 1,
+                'picture_id' => null,
+            ],
+            [
+                'id' => 4,
+                'name' => 'task_4',
+                'title' => 'Таск 5',
+                'user_id' => 1,
+                'picture_id' => null,
+            ],
+        ];
+
+        $table->insert($tasks)->save();
     }
 
     public function down(): void
