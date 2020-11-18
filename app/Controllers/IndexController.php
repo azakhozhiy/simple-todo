@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Packages\Core\Engine\Session;
 use App\Packages\Tasks\Repositories\TaskRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +18,12 @@ class IndexController
         $this->taskRepository = $taskRepository;
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request, Session $session): Response
     {
         $page = $request->get('page', 1);
 
         $taskQuery = $this->taskRepository->query();
 
-        return new Response(view('index.php', ['taskQuery' => $taskQuery]));
+        return new Response(view('index', ['taskQuery' => $taskQuery]));
     }
 }

@@ -2,12 +2,24 @@
 
 namespace App\Packages\Core\Engine;
 
+use App\Controllers\NotFoundController;
 use ReflectionException;
 use ReflectionMethod;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class Router
+ *
+ * @property array $routes модули и действия системы
+ * @property Request $request
+ * @property string $defaultModule
+ * @property string $defaultAction
+ * @property Application $app
+ *
+ * @package App\Packages\Core\Engine
+ */
 class Router
 {
     public const GET = 'GET';
@@ -57,19 +69,23 @@ class Router
      */
     public function getMethodDependencies(string $class, $method): array
     {
-        $refMethod = new ReflectionMethod($class, $method);
+        if (method_exists($class, $method)) {
+            $refMethod = new ReflectionMethod($class, $method);
 
-        $parameters = $refMethod->getParameters();
-        $dependencies = [];
+            $parameters = $refMethod->getParameters();
+            $dependencies = [];
 
-        foreach ($parameters as $parameter) {
-            if ($parameter->getType()) {
-                $argName = $parameter->getType()->getName();
-                $dependencies[] = $this->app->make($argName);
+            foreach ($parameters as $parameter) {
+                if ($parameter->getType()) {
+                    $argName = $parameter->getType()->getName();
+                    $dependencies[] = $this->app->make($argName);
+                }
             }
+
+            return $dependencies;
         }
 
-        return $dependencies;
+        return [];
     }
 
     /**
@@ -110,7 +126,7 @@ class Router
                 $this->validateAction($action);
 
                 if ($action['method_type'] !== $method_type) {
-                    return [];
+                    return $this->showNotFound();
                 }
 
                 $method = $action['method'];
@@ -118,12 +134,24 @@ class Router
         }
 
         if (!class_exists($controller)) {
-            throw new RuntimeException('Сontroller must be a class.');
+            return $this->showNotFound();
         }
 
         if (!method_exists($controller, $method)) {
-            throw new RuntimeException('Method in controller not exist.');
+            return $this->showNotFound();
         }
+
+        return $this->call($controller, $method);
+    }
+
+    /**
+     * @return Response
+     * @throws ReflectionException
+     */
+    public function showNotFound(): Response
+    {
+        $controller = NotFoundController::class;
+        $method = 'show';
 
         return $this->call($controller, $method);
     }

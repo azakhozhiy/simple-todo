@@ -36,7 +36,8 @@ if (!function_exists('view')) {
      */
     function view(string $file, array $args = [])
     {
-        $template_path = views_path($file);
+        $file_path = $file.'.php';
+        $template_path = views_path($file_path);
 
         if (!file_exists($template_path)) {
             throw new RuntimeException('Template not found.');
