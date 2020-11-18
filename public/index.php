@@ -21,7 +21,7 @@ $app = require __DIR__.'/../bootstrap/app.php';
 
 $request = Request::createFromGlobals();
 
-$controller = new IndexController($app->make(TaskRepository::class), $session);
+$controller = new IndexController($app->make(TaskRepository::class));
 
 return $controller->index($request);
 
