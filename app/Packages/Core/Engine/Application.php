@@ -99,7 +99,7 @@ class Application
         $this->bind($abstract, $concrete);
     }
 
-    public function bind($abstract, $concrete = null, $shared = false): void
+    public function bind($abstract, $concrete = null): void
     {
         $this->dropStaleInstances($abstract);
 
