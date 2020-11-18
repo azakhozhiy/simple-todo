@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Packages\Core\Engine;
 
 use Closure;
+use Exception;
 use RuntimeException;
 use TypeError;
 
@@ -22,7 +23,7 @@ class Application
      * Application constructor.
      * @param  string  $basePath
      * @param  array  $config
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $basePath, array $config)
     {

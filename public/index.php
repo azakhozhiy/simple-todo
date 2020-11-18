@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Controllers\IndexController;
 use App\Packages\Core\Engine\Application;
 use App\Packages\Tasks\Repositories\TaskRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
