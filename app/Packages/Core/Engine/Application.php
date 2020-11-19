@@ -46,7 +46,7 @@ class Application
      */
     private function initDatabase(array $config): void
     {
-        if (!isset($config['app'])) {
+        if (!isset($config['env'])) {
             throw new RuntimeException('App config not found.');
         }
 

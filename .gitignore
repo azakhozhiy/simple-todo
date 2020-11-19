@@ -3,6 +3,8 @@
 /node_modules
 /storage/uploads/**
 /dayside
+/config.php
+/phinx.php
 /public/css/**
 /public/js/**
 /public/mix-manifest.json
