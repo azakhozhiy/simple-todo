@@ -27,6 +27,23 @@ class TaskController
         $this->taskManager = $taskManager;
     }
 
+    public function getContent(Request $request): JsonResponse
+    {
+        $task_id = (int) $request->get('task_id');
+
+        if (!$task_id) {
+            return jsonResponse(['error' => 'Bad request'], 400);
+        }
+
+        $task = $this->taskRepository->getOneById($task_id);
+
+        if (!$task) {
+            return jsonResponse(['error' => 'Task not found.']);
+        }
+
+        return jsonResponse(['content' => $task['content']]);
+    }
+
     public function createOrUpdate(Request $request, FileManager $fileManager, Auth $auth): JsonResponse
     {
         $data = $request->request;
@@ -57,7 +74,6 @@ class TaskController
         $name = $this->taskRepository->genUniqName($title);
 
         $creator_id = $user['id'] ?? null;
-
 
         try {
             $this->taskManager->getConnection()->beginTransaction();

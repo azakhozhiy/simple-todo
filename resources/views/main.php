@@ -76,9 +76,16 @@
                      data-parent="#accordion"
                   >
                     <div class="card-body">
+
+                      <div class="task-picture">
+                        <img src="<?php echo $task['picture_url']; ?>" alt="">
+                      </div>
+
                       <ul class="list-unstyled">
                         <li>Дата создания: <?php echo $task['created_at']; ?></li>
-                        <li>Создатель: <?php echo $task['creator_id']; ?></li>
+                          <?php if ($task['creator_id'] > 0): ?>
+                            <li>Создатель: <?php echo $task['creator']['name']; ?></li>
+                          <?php endif; ?>
                       </ul>
                     </div>
                   </div>

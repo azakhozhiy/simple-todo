@@ -3,11 +3,8 @@
 use App\Controllers\AuthController;
 use App\Controllers\IndexController;
 use App\Packages\Core\Engine\Router;
-use App\Packages\Core\Services\AuthService;
-use App\Packages\Files\Managers\FileManager;
+use App\Packages\Files\Controllers\FileController;
 use App\Packages\Tasks\Controllers\TaskController;
-use App\Packages\Tasks\Managers\TaskManager;
-use App\Packages\Tasks\Repositories\TaskRepository;
 
 return [
     'main' => [
@@ -32,6 +29,19 @@ return [
             ],
         ],
     ],
+    'files' => [
+        'controller' => FileController::class,
+        'actions' => [
+            'get' => [
+                'method_type' => Router::GET,
+                'method' => 'getByOriginalName',
+            ],
+            'placeholder' => [
+                'method_type' => Router::GET,
+                'method' => 'getPlaceholder',
+            ],
+        ],
+    ],
     'tasks' => [
         'controller' => TaskController::class,
         'actions' => [
@@ -42,6 +52,10 @@ return [
             'toggle' => [
                 'method' => 'toggleCompleted',
                 'method_type' => Router::POST,
+            ],
+            'getContent' => [
+                'method' => 'getContent',
+                'method_type' => Router::GET,
             ],
         ],
     ],

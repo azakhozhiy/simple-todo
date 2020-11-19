@@ -8,6 +8,7 @@ use App\Packages\Core\Engine\Router;
 use App\Packages\Core\Engine\Session;
 use App\Packages\Core\Repositories\UserRepository;
 use App\Packages\Files\Managers\FileManager;
+use App\Packages\Files\Repositories\FileRepository;
 use App\Packages\Tasks\Managers\TaskManager;
 use App\Packages\Tasks\Repositories\TaskRepository;
 use Intervention\Image\ImageManager;
@@ -29,6 +30,8 @@ $app->singleton(Auth::class, function (Application $app) {
 });
 $app->singleton(Request::class, fn(Application $app) => Request::createFromGlobals());
 $app->singleton(Router::class, fn(Application $app) => new Router($app, $routes));
+
+$app->singleton(FileRepository::class);
 
 $app->singleton(FileManager::class, function (Application $app) {
     return new FileManager($app->make(ImageManager::class));

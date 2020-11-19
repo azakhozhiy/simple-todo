@@ -116,11 +116,24 @@ export default {
       
       http.post('?module=tasks&action=touch', formData)
         .then(res => {
-          console.log(res);
+          $.notifier.callSystem({
+            type: 'done',
+            icon: 'check',
+            text: 'Задача успешно добавлена!'
+          });
         })
         .catch(e => {
-        
-        });
+          $.notifier.callSystem({
+            type: 'error',
+            icon: 'close',
+            text: 'Произошла ошибка!'
+          });
+        })
+        .finally(() => {
+          setTimeout(() => {
+            document.location.reload();
+          }, 800)
+        })
     });
     
     registerInputWatcher(titleFormGroup, inputTaskTitle);

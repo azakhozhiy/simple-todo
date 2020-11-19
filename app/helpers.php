@@ -24,6 +24,22 @@ if (!function_exists('app')) {
     }
 }
 
+if (!function_exists('url')) {
+    function url(string $url): string
+    {
+        $protocol = 'http';
+        $is_ssl = !empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS']);
+
+        if ($is_ssl) {
+            $protocol = 'https';
+        }
+
+        $host = $protocol."://".$_SERVER['SERVER_NAME'];
+
+        return $host.'/'.$url;
+    }
+}
+
 if (!function_exists('request')) {
     function request(): Request
     {

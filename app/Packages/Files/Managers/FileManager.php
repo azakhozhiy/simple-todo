@@ -29,13 +29,13 @@ class FileManager extends CoreManager
 
         $extension = mb_strtolower($file->getClientOriginalExtension());
         $mimetype = $file->getClientMimeType();
-        $original_name = md5($file->getClientOriginalName());
+        $original_name = md5($dir.uniqid((string) time(), true));
 
         $file_path = $dir.$original_name.'.'.$extension;
 
         $this->imageManager->make($file)
             ->fit(File::MAX_WIDTH, File::MAX_HEIGHT)
-            ->save($dir.md5((string) time()).'.'.$extension);
+            ->save($dir.$original_name.'.'.$extension);
 
         return $this->record(static function (PDO $db, string $table) use (
             $creator_id,
