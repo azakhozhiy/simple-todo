@@ -31,6 +31,9 @@
     align-content: center;
     align-items: center;
   }
+  &--completed{
+
+  }
 }
 
 .btn-icon {
@@ -39,4 +42,22 @@
   width: 25px;
   height: 25px;
   border-radius: 100%;
+  &--success{
+    color: #12b038;
+    &:hover{
+      color: #09982a;
+    }
+  }
+  &--primary{
+    color: #046ad6;
+    &:hover{
+      color: #046AD6;
+    }
+  }
+  &--danger{
+    color: #BF0318;
+    &:hover{
+      color: #9f0516;
+    }
+  }
 }

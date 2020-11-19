@@ -20,8 +20,9 @@ class IndexController
     public function index(Request $request): Response
     {
         $page = $request->get('page', 1);
+        $order_by = ['id', 'desc'];
 
-        $tasks = $this->taskRepository->getAll(['id', 'title', 'created_at']);
+        $tasks = $this->taskRepository->getAll([], $order_by);
 
         return new Response(view('main', ['tasks' => $tasks]));
     }

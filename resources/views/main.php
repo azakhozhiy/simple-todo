@@ -1,12 +1,16 @@
-<section class="section tasks" id="main-page">
+<section class="section tasks mb-5" id="main-page">
   <div class="container-fluid">
     <div class="section__content">
       <div class="row">
         <div class="col-md-6">
           <h4>Список задач</h4>
-          <div id="accordion" class="mt-4">
-            <div class="card task-card">
-                <?php foreach ($tasks as $task): ?>
+          <div id="accordion" class="tasks-list" class="mt-4">
+              <?php foreach ($tasks as $task): ?>
+                <div
+                   id="task-card-<?php echo $task['id']; ?>"
+                   data-task-id="<?php echo $task['id']; ?>"
+                   class="card task-card <?php echo $task['is_complete'] ? 'task-card--completed' : ''; ?> mb-2"
+                >
                   <div class="card-header">
                     <h5 class="mb-0">
                       <button
@@ -21,12 +25,49 @@
                     <div class="spacer"></div>
                     <div class="task-card__actions">
                         <?php if (auth()->userIsLogged()): ?>
-                          <button type="button" class="btn btn-icon">
+                            <?php if (!$task['is_complete']): ?>
+                            <button
+                               type="button"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title="Завершить задачу"
+                               class="btn btn-icon btn-icon--success mr-2 taskToggle"
+                            >
+                              <span class="material-icons">assignment_turned_in</span>
+                            </button>
+                            <?php endif; ?>
+
+                            <?php if ($task['is_complete']): ?>
+                            <button
+                               type="button"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title="Перевести задачу в незавершенные"
+                               class="btn btn-icon btn-icon--danger mr-2 taskToggle"
+                            >
+                              <span class="material-icons">unpublished</span>
+                            </button>
+                            <?php endif; ?>
+                          <button
+                             type="button"
+                             class="btn btn-icon btn-icon--primary "
+                             data-toggle="tooltip"
+                             data-placement="top"
+                             title="Редактировать"
+                          >
                             <span class="material-icons">create</span>
                           </button>
+                        <?php else: ?>
+                          <div
+                             style="line-height: normal; color: #12b038"
+                             data-toggle="tooltip"
+                             title="Задача завершена"
+                             data-placement="top"
+                          >
+                            <span class="material-icons">check</span>
+                          </div>
                         <?php endif; ?>
                     </div>
-
                   </div>
 
                   <div
@@ -35,11 +76,14 @@
                      data-parent="#accordion"
                   >
                     <div class="card-body">
-
+                      <ul class="list-unstyled">
+                        <li>Дата создания: <?php echo $task['created_at']; ?></li>
+                        <li>Создатель: <?php echo $task['creator_id']; ?></li>
+                      </ul>
                     </div>
                   </div>
-                <?php endforeach; ?>
-            </div>
+                </div>
+              <?php endforeach; ?>
           </div>
         </div>
         <div class="col-md-6">
@@ -48,19 +92,29 @@
           <div class="card mt-4">
             <div class="card-body">
               <form id="createTask">
+                <input type="hidden" id="formTaskId">
                 <div class="form-group">
-                  <label for="title">Название</label>
+                  <label for="formTaskTitle">Название</label>
                   <input
                      class="form-control"
-                     id="title"
-                     aria-describedby="emailHelp"
+                     id="formTaskTitle"
                      placeholder="Например: доработать модуль авторизации"
                   >
                 </div>
 
                 <div class="form-group">
-                  <label for="taskContent">Суть задачи</label>
-                  <div id="taskContent"></div>
+                  <label for="formTaskPicture">Обложка</label>
+                  <input
+                     type="file"
+                     accept="image/jpeg, image/gif, image/png"
+                     class="form-control"
+                     id="formTaskPicture"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="formTaskContent">Суть задачи</label>
+                  <div id="formTaskContent"></div>
                   <button
                      type="button"
                      class="btn btn-primary mt-2"
@@ -68,6 +122,10 @@
                   >
                     Предпросмотр
                   </button>
+                </div>
+                <hr>
+                <div class="actions">
+                  <button type="button" id="taskSaveButton" class="btn btn-success">Сохранить</button>
                 </div>
               </form>
             </div>

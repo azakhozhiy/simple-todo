@@ -9,7 +9,7 @@ use PDO;
 
 abstract class CoreRepository implements RepositoryContract
 {
-    public function findOneById(int $id)
+    public function getOneById(int $id)
     {
         $table = $this->getModel()->getTable();
         $sth = $this->getModel()->getConnection()->prepare("SELECT * FROM $table WHERE id=:id");
@@ -28,7 +28,13 @@ abstract class CoreRepository implements RepositoryContract
             $columns_string = implode(',', $columns);
         }
 
-        $sth = $this->getModel()->getConnection()->query("SELECT $columns_string FROM $table");
+        $sql = "SELECT $columns_string FROM $table";
+
+        if (count($order)) {
+            $sql .= " ORDER BY $order[0] $order[1]";
+        }
+
+        $sth = $this->getModel()->getConnection()->query($sql);
 
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }

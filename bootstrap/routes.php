@@ -39,8 +39,8 @@ return [
                 'method' => 'createOrUpdate',
                 'method_type' => Router::POST,
             ],
-            'finish' => [
-                'method' => 'finish',
+            'toggle' => [
+                'method' => 'toggleCompleted',
                 'method_type' => Router::POST,
             ],
         ],

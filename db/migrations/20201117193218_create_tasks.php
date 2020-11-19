@@ -21,13 +21,12 @@ final class CreateTasks extends AbstractMigration
     {
         $table = $this->table('tasks');
 
-        $table->addColumn('name', 'string')
-            ->addColumn('title', 'string')
-            ->addColumn('user_id', 'integer', ['null' => true])
+        $table->addColumn('title', 'string')
+            ->addColumn('creator_id', 'integer', ['null' => true])
             ->addColumn('picture_id', 'integer', ['null' => true])
             ->addColumn('is_complete', 'boolean', ['default' => false])
             ->addForeignKey(
-                'user_id',
+                'creator_id',
                 'users',
                 'id',
                 [
@@ -45,7 +44,6 @@ final class CreateTasks extends AbstractMigration
                 ]
             )
             ->addColumn('content', 'string', ['limit' => 100, 'null' => true])
-            ->addIndex(['name'], ['unique' => true])
             ->addColumn('completed_at', 'timestamp', ['null' => true])
             ->addTimestamps()
             ->create();
@@ -53,32 +51,35 @@ final class CreateTasks extends AbstractMigration
         $tasks = [
             [
                 'id' => 1,
-                'name' => 'task_1',
                 'title' => 'Таск 1',
-                'user_id' => 1,
+                'creator_id' => 1,
                 'picture_id' => null,
                 'is_complete' => false,
             ],
             [
                 'id' => 2,
-                'name' => 'task_2',
                 'title' => 'Таск 2',
-                'user_id' => 1,
+                'creator_id' => 1,
                 'picture_id' => null,
                 'is_complete' => true,
             ],
             [
                 'id' => 3,
-                'name' => 'task_3',
-                'title' => 'Таск 4',
+                'title' => 'Таск 3',
                 'picture_id' => null,
             ],
             [
                 'id' => 4,
-                'name' => 'task_4',
-                'title' => 'Таск 5',
-                'user_id' => 1,
+                'title' => 'Таск 4',
+                'creator_id' => null,
                 'picture_id' => null,
+            ],
+            [
+                'id' => 5,
+                'title' => 'Таск 4',
+                'creator_id' => null,
+                'picture_id' => null,
+                'content' => '<p>Test content</p>'
             ],
         ];
 

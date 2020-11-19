@@ -21,13 +21,14 @@ const appSelector = '#app'
 $(document).ready(() => {
   
   authComponent.install();
-  
   taskForm.install();
   
   // main page
   $('#accordion').collapse({
     toggle: false
   });
+  
+  $('[data-toggle="tooltip"]').tooltip()
   
   /*
   $.notifier.callSystem({

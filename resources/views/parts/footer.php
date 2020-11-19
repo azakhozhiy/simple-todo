@@ -29,6 +29,7 @@
           <div class="form-group">
             <label for="userPassword">Пароль</label>
             <input
+               type="password"
                class="form-control"
                id="userPassword"
                aria-describedby="emailHelp"
