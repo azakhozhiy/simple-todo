@@ -41,6 +41,6 @@ final class CreateFiles extends AbstractMigration
 
     public function down(): void
     {
-        $this->table('files')->drop();
+        $this->table('files')->drop()->save();
     }
 }

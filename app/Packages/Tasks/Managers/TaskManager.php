@@ -8,7 +8,12 @@ use App\Packages\Core\Abstracts\CoreManager;
 
 class TaskManager extends CoreManager
 {
-    public function createOrUpdate()
-    {
+    public function createOrUpdate(
+        ?int $task_id,
+        ?int $creator_id,
+        string $title,
+        ?string $content,
+        ?int $picture_id
+    ) {
     }
 }

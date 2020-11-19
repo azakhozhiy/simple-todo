@@ -1,3 +1,7 @@
+import http from './http';
+import authComponent from './components/auth'
+import taskForm from './components/taskForm';
+
 window._ = require('lodash');
 
 /**
@@ -6,9 +10,30 @@ window._ = require('lodash');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = http;
 window.$ = window.jQuery = require('jquery');
+require('bootstrap');
+require('../vendor/summernote/summernote-lite');
+require('../vendor/notifier/notifier')
+
+const appSelector = '#app'
 
 $(document).ready(() => {
-
+  
+  authComponent.install();
+  
+  taskForm.install();
+  
+  // main page
+  $('#accordion').collapse({
+    toggle: false
+  });
+  
+  /*
+  $.notifier.callSystem({
+    type: 'done',
+    icon: 'check',
+    text: 'Задача успешна добавлена!'
+  });
+   */
 });

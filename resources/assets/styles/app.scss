@@ -1,11 +1,42 @@
 @import "bootstrap";
+@import "../vendor/summernote/summernote-lite.min.css";
+@import "../vendor/notifier/notifier.css";
 
-.tasks{
+.tasks {
   margin-top: 2rem;
 }
 
-.section{
-  &__content{
+.spacer {
+  -webkit-box-flex: 1 !important;
+  -ms-flex-positive: 1 !important;
+  flex-grow: 1 !important;
+}
+
+.section {
+  &__content {
 
   }
+}
+
+.modal-task-preview {
+
+  .modal-dialog {
+    max-width: 700px;
+  }
+}
+
+.task-card {
+  .card-header {
+    display: flex;
+    align-content: center;
+    align-items: center;
+  }
+}
+
+.btn-icon {
+  padding:0;
+  line-height: normal;
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
 }

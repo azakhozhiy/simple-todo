@@ -20,7 +20,7 @@ class Session
 
     public function get(string $key)
     {
-        return $_SESSION[$key];
+        return $_SESSION[$key] ?? null;
     }
 
     public function forget(string $key): void

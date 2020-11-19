@@ -25,6 +25,7 @@ final class CreateTasks extends AbstractMigration
             ->addColumn('title', 'string')
             ->addColumn('user_id', 'integer', ['null' => true])
             ->addColumn('picture_id', 'integer', ['null' => true])
+            ->addColumn('is_complete', 'boolean', ['default' => false])
             ->addForeignKey(
                 'user_id',
                 'users',
@@ -45,6 +46,7 @@ final class CreateTasks extends AbstractMigration
             )
             ->addColumn('content', 'string', ['limit' => 100, 'null' => true])
             ->addIndex(['name'], ['unique' => true])
+            ->addColumn('completed_at', 'timestamp', ['null' => true])
             ->addTimestamps()
             ->create();
 
@@ -55,6 +57,7 @@ final class CreateTasks extends AbstractMigration
                 'title' => 'Таск 1',
                 'user_id' => 1,
                 'picture_id' => null,
+                'is_complete' => false,
             ],
             [
                 'id' => 2,
@@ -62,12 +65,12 @@ final class CreateTasks extends AbstractMigration
                 'title' => 'Таск 2',
                 'user_id' => 1,
                 'picture_id' => null,
+                'is_complete' => true,
             ],
             [
                 'id' => 3,
                 'name' => 'task_3',
                 'title' => 'Таск 4',
-                'user_id' => 1,
                 'picture_id' => null,
             ],
             [
@@ -80,10 +83,11 @@ final class CreateTasks extends AbstractMigration
         ];
 
         $table->insert($tasks)->save();
+
     }
 
     public function down(): void
     {
-        $this->table('tasks')->drop();
+        $this->table('tasks')->drop()->save();
     }
 }

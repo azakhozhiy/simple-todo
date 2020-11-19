@@ -3,3 +3,6 @@
 /node_modules
 /storage/uploads/
 /dayside
+/public/css/**
+/public/js/**
+/public/mix-manifest.json

@@ -23,7 +23,7 @@ return [
         'controller' => AuthController::class,
         'actions' => [
             'logout' => [
-                'method_type' => Router::POST,
+                'method_type' => Router::GET,
                 'method' => 'logout',
             ],
             'login' => [

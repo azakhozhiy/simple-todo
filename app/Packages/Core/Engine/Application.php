@@ -161,6 +161,6 @@ class Application
             return $initialized;
         }
 
-        throw new RuntimeException('Bind not exists.');
+        throw new RuntimeException('Bind not exists. Abstract: ' . $abstract);
     }
 }

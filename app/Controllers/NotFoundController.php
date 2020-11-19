@@ -8,6 +8,6 @@ class NotFoundController
 {
     public function show()
     {
-        return new Response(view('404'));
+        return new Response(view('404', [], false));
     }
 }

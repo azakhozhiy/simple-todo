@@ -5,34 +5,29 @@ declare(strict_types=1);
 namespace App\Packages\Core\Models;
 
 use PDO;
-use PDOStatement;
 
 abstract class BaseModel
 {
     protected PDO $connection;
+    protected string $table;
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
 
     public function __construct()
     {
         $this->connection = app()->getDatabase()->getConnection();
     }
 
-    public static function getConnection(): PDO
+    public function getConnection(): PDO
     {
-        return (new static)->connection;
+        return $this->connection;
     }
 
-    /**
-     * @param  string|null  $sql
-     * @return false|PDOStatement
-     */
-    public static function query(?string $sql = null)
+    public static function connection(): PDO
     {
-        $model = new static;
-
-        if ($sql) {
-            return $model->connection->query($sql);
-        }
-
-        return false;
+        return (new static)->connection;
     }
 }

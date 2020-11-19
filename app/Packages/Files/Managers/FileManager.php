@@ -8,8 +8,9 @@ use App\Packages\Core\Abstracts\CoreManager;
 
 class FileManager extends CoreManager
 {
-    public function upload()
+    public function upload($file)
     {
+        print_r($file);
     }
 
     public function create()

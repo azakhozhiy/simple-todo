@@ -3,7 +3,11 @@
 declare(strict_types=1);
 
 use App\Packages\Core\Engine\Application;
+use App\Packages\Core\Engine\Auth;
+use App\Packages\Core\Engine\Session;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!function_exists('app')) {
     /**
@@ -27,20 +31,57 @@ if (!function_exists('request')) {
     }
 }
 
+if (!function_exists('auth')) {
+    function auth()
+    {
+        /** @var Auth $auth */
+        $auth = app()->make(Auth::class);
+
+        return $auth;
+    }
+}
+
+if (!function_exists('jsonResponse')) {
+    function jsonResponse(array $data, int $status_code = 200): JsonResponse
+    {
+        return (new JsonResponse($data, $status_code))
+            ->send();
+    }
+}
+
+if (!function_exists('response')) {
+    function response($data, int $status_code = 200): Response
+    {
+        return (new Response($data, $status_code))
+            ->prepare(app()->make(Request::class))
+            ->send();
+    }
+}
+
 if (!function_exists('view')) {
     /**
-     * @param  string  $file
+     * @param  string  $page
      * @param  array  $args
+     * @param  bool  $is_part
      * @return false|string
-     * @throws RuntimeException
      */
-    function view(string $file, array $args = [])
+    function view(string $page, array $args = [], bool $is_part = true)
     {
-        $file_path = $file.'.php';
+        $file_path = $page.'.php';
         $template_path = views_path($file_path);
+        $header = views_path('parts/header.php');
+        $footer = views_path('parts/footer.php');
 
         if (!file_exists($template_path)) {
             throw new RuntimeException('Template not found.');
+        }
+
+        if (!file_exists($header)) {
+            throw new RuntimeException('Header not found.');
+        }
+
+        if (!file_exists($footer)) {
+            throw new RuntimeException('Footer not found.');
         }
 
         if (count($args)) {
@@ -48,9 +89,25 @@ if (!function_exists('view')) {
         }
 
         ob_start();
+
+        if ($is_part) {
+            include $header;
+        }
+
         include $template_path;
 
+        if ($is_part) {
+            include $footer;
+        }
+
         print ob_get_clean();
+    }
+}
+
+if (!function_exists('session')) {
+    function session(): Session
+    {
+        return app()->make(Session::class);
     }
 }
 
