@@ -21,12 +21,13 @@ final class CreateFiles extends AbstractMigration
     {
         $table = $this->table('files');
 
-        $table->addColumn('user_id', 'integer', ['null' => true])
+        $table->addColumn('creator_id', 'integer', ['null' => true])
             ->addColumn('original_name', 'string')
             ->addColumn('extension', 'string')
             ->addColumn('mimetype', 'string')
+            ->addColumn('file_path', 'string')
             ->addForeignKey(
-                'user_id',
+                'creator_id',
                 'users',
                 'id',
                 [

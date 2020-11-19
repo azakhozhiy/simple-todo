@@ -29,7 +29,6 @@ final class CreateUsersTable extends AbstractMigration
             ->create();
 
         $admin = [
-            'id' => 1,
             'name' => 'Админ',
             'login' => 'admin',
             'password' => md5('123'),

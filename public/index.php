@@ -16,9 +16,11 @@ $app = require __DIR__.'/../bootstrap/app.php';
 
 /** @var Router $router */
 $router = $app->make(Router::class);
-
+try{
 return $router->dispatch();
+}catch (Exception $e){
 
+}
 
 
 

@@ -34,6 +34,10 @@ const taskToggle = () => {
   });
 };
 
+const editTask = () => {
+
+}
+
 export default {
   install () {
     // Preview
@@ -104,7 +108,7 @@ export default {
         formData.append('picture', inputTaskPicture[0].files[0]);
       }
       
-      const taskId = inputTaskId.val() ? parseInt(inputTaskId.val()) : null;
+      const taskId = inputTaskId.val() ? inputTaskId.val() : null;
       
       formData.append('content', taskEditor.summernote('code'));
       formData.append('id', taskId);

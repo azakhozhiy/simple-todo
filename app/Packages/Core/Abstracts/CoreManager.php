@@ -33,6 +33,7 @@ abstract class CoreManager implements ManagerContract
     {
         $db = $this->getConnection();
         $table = $this->getTable();
+
         return $callback($db, $table);
     }
 }

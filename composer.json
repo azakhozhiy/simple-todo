@@ -13,7 +13,8 @@
     "ext-pdo": "*",
     "ext-json": "*",
     "ext-gd": "*",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "intervention/image": "^2.5"
   },
   "autoload": {
     "files": [

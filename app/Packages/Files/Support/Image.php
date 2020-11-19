@@ -2,10 +2,20 @@
 
 namespace App\Packages\Files\Support;
 
+use App\Packages\Files\Managers\FileManager;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Image
 {
+    private FileManager $fileManager;
+
+    public function __construct(FileManager $fileManager)
+    {
+        $this->fileManager = $fileManager;
+    }
+
+
     /**
      * @static
      * @param  UploadedFile  $file
@@ -22,17 +32,34 @@ class Image
         $strict = false
     ): void {
         $dir = dirname($destination);
-        if (!is_dir($dir) && !mkdir($dir, 0770, true) && !is_dir($dir)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+
+        $extensions = [
+            'jpg' => 'imagejpeg',
+            'jpeg' => 'imagejpeg',
+            'png' => 'imagepng',
+            'gif' => 'imagegif',
+        ];
+
+        $file_extension = mb_strtolower($file->getClientOriginalExtension());
+
+        if (!isset($extensions[$file_extension])) {
+            throw new RuntimeException('File not supported.');
         }
-        $fileContents = file_get_contents($file->getPath());
+
+        if (!is_dir($dir) && !mkdir($dir, 0770, true) && !is_dir($dir)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
+
+        $fileContents = file_get_contents($file->getRealPath());
         $image = imagecreatefromstring($fileContents);
 
         $thumbnail = self::resizeImage($image, $targetWidth, $targetHeight, $strict);
 
-        imagejpeg($thumbnail, $destination, 100);
-        imagedestroy($thumbnail);
-        imagedestroy($image);
+        if ($thumbnail) {
+            imagejpeg($thumbnail, $destination.'/'.$file->getClientOriginalName(), 100);
+            imagedestroy($thumbnail);
+            imagedestroy($image);
+        }
     }
 
     public static function resizeImage($original, int $targetWidth, int $targetHeight, $strict = false)

@@ -21,7 +21,8 @@ final class CreateTasks extends AbstractMigration
     {
         $table = $this->table('tasks');
 
-        $table->addColumn('title', 'string')
+        $table->addColumn('name', 'string')
+            ->addColumn('title', 'string')
             ->addColumn('creator_id', 'integer', ['null' => true])
             ->addColumn('picture_id', 'integer', ['null' => true])
             ->addColumn('is_complete', 'boolean', ['default' => false])
@@ -43,6 +44,7 @@ final class CreateTasks extends AbstractMigration
                     'update' => 'restrict',
                 ]
             )
+            ->addIndex(['name'], ['unique' => true])
             ->addColumn('content', 'string', ['limit' => 100, 'null' => true])
             ->addColumn('completed_at', 'timestamp', ['null' => true])
             ->addTimestamps()
@@ -50,41 +52,40 @@ final class CreateTasks extends AbstractMigration
 
         $tasks = [
             [
-                'id' => 1,
                 'title' => 'Таск 1',
+                'name' => 'task_1',
                 'creator_id' => 1,
                 'picture_id' => null,
                 'is_complete' => false,
             ],
             [
-                'id' => 2,
                 'title' => 'Таск 2',
+                'name' => 'task_2',
                 'creator_id' => 1,
                 'picture_id' => null,
                 'is_complete' => true,
             ],
             [
-                'id' => 3,
                 'title' => 'Таск 3',
+                'name' => 'task_3',
                 'picture_id' => null,
             ],
             [
-                'id' => 4,
                 'title' => 'Таск 4',
+                'name' => 'task_4',
                 'creator_id' => null,
                 'picture_id' => null,
             ],
             [
-                'id' => 5,
-                'title' => 'Таск 4',
+                'title' => 'Таск 5',
                 'creator_id' => null,
+                'name' => 'task_5',
                 'picture_id' => null,
-                'content' => '<p>Test content</p>'
+                'content' => '<p>Test content</p>',
             ],
         ];
 
         $table->insert($tasks)->save();
-
     }
 
     public function down(): void

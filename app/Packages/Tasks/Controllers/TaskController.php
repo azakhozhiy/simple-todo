@@ -6,10 +6,10 @@ namespace App\Packages\Tasks\Controllers;
 
 use App\Packages\Core\Engine\Auth;
 use App\Packages\Files\Managers\FileManager;
-use App\Packages\Files\Support\Image;
 use App\Packages\Tasks\Managers\TaskManager;
 use App\Packages\Tasks\Models\Task;
 use App\Packages\Tasks\Repositories\TaskRepository;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +19,10 @@ class TaskController
     private TaskRepository $taskRepository;
     private TaskManager $taskManager;
 
-    public function __construct(TaskRepository $taskRepository, TaskManager $taskManager)
-    {
+    public function __construct(
+        TaskRepository $taskRepository,
+        TaskManager $taskManager
+    ) {
         $this->taskRepository = $taskRepository;
         $this->taskManager = $taskManager;
     }
@@ -40,6 +42,10 @@ class TaskController
             return jsonResponse(['error' => 'You cannot edit.'], 400);
         }
 
+        if (!$title) {
+            return jsonResponse(['error' => 'Title reqired.'], 400);
+        }
+
         $task = $task_id ? $this->taskRepository->getOneById($task_id) : null;
 
         // If task exist in request, but not found in database
@@ -48,13 +54,38 @@ class TaskController
         }
 
         $user = $auth->user();
-        $name = str2translit($title);
+        $name = $this->taskRepository->genUniqName($title);
 
         $creator_id = $user['id'] ?? null;
 
-        $this->taskManager->createOrUpdate($task_id, $creator_id, $title, $content);
 
-        return jsonResponse([]);
+        try {
+            $this->taskManager->getConnection()->beginTransaction();
+
+            $task_id = $this->taskManager->createOrUpdate($task_id, $creator_id, $title, $name, $content);
+
+            $task = [
+                'id' => $task_id,
+                'name' => $name,
+                'title' => $title,
+                'creator_id' => $creator_id,
+                'content' => $content,
+            ];
+
+            if ($picture) {
+                $dir = Task::pictureFolder($task_id);
+                $picture_id = $fileManager->create($creator_id, $picture, $dir);
+                $this->taskManager->associatePicture($task_id, $picture_id);
+            }
+
+            $this->taskManager->getConnection()->commit();
+        } catch (Exception $e) {
+            $this->taskManager->getConnection()->rollBack();
+
+            return jsonResponse(['message' => $e->getMessage(), 'code' => $e->getCode()], 400);
+        }
+
+        return jsonResponse($task);
     }
 
     public function toggleCompleted(Request $request, Auth $auth): JsonResponse

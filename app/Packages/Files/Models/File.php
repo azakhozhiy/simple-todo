@@ -13,4 +13,12 @@ use App\Packages\Core\Models\BaseModel;
 class File extends BaseModel
 {
     protected string $table = 'files';
+
+    public const MAX_WIDTH = 320;
+    public const MAX_HEIGHT = 240;
+
+    public static function uploadsPath(string $path): string
+    {
+        return storage_path('uploads/'.$path);
+    }
 }

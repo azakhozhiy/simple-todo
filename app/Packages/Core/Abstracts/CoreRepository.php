@@ -19,6 +19,30 @@ abstract class CoreRepository implements RepositoryContract
         return $sth->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function genUniqName(string $title, int $level = 0)
+    {
+        $str = $level ? $title.'-'.$level : $title;
+        $name = str2translit($str);
+
+        $model = $this->getByField('name', $name);
+
+        if ($model) {
+            return $this->genUniqName($title, $level + 1);
+        }
+
+        return $name;
+    }
+
+    public function getByField(string $field, $value)
+    {
+        $table = $this->getModel()->getTable();
+        $sth = $this->getModel()->getConnection()->prepare("SELECT * FROM $table WHERE $field=:field_value");
+        $sth->bindParam(':field_value', $value);
+        $sth->execute();
+
+        return $sth->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getAll(array $columns = [], array $order = [], int $page = 1, int $limit = 3): array
     {
         $table = $this->getModel()->getTable();

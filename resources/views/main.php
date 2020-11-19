@@ -2,9 +2,9 @@
   <div class="container-fluid">
     <div class="section__content">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
           <h4>Список задач</h4>
-          <div id="accordion" class="tasks-list" class="mt-4">
+          <div id="accordion" class="tasks-list mt-4">
               <?php foreach ($tasks as $task): ?>
                 <div
                    id="task-card-<?php echo $task['id']; ?>"
@@ -86,7 +86,7 @@
               <?php endforeach; ?>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
           <h4>Добавить задачу</h4>
 
           <div class="card mt-4">
