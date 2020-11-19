@@ -89,7 +89,7 @@ import TaskForm from '../components/TaskForm.vue';
 import http from '../http';
 import forEach from 'lodash/forEach';
 import cloneDeep from 'lodash/cloneDeep';
-import { getQueryObject } from '../helpers/url';
+import { getQueryObject, updateQueryParam } from '../helpers/url';
 
 export default {
   components: {TaskList, TaskForm},
@@ -104,6 +104,7 @@ export default {
         data: [],
 
       },
+      searchParams: null,
       currentPage: 1,
       loading: false,
       user: {},
@@ -111,20 +112,54 @@ export default {
       filters: this.getDefaultFilters(),
     };
   },
-  watch:{
-    currentPage: function(v){
-      this.getTasks()
+  watch: {
+    currentPage: function (v) {
+      this.getTasks();
+      this.setSearchParam('page', v)
+    },
+    'filters.search': function(v){
+      this.setSearchParam('search', v)
+    },
+    'filters.status': function(v){
+      this.setSearchParam('status', v)
+    },
+    'filters.order_by': function(v){
+      this.setSearchParam('order_by', v)
     }
   },
   created () {
     this.$set(this, 'user', window.user);
-    this.getTasks();
 
     const query = getQueryObject();
 
-    alert(query)
+    this.searchParams = new URLSearchParams(window.location.search);
+
+    if (query) {
+      if (query.order_by) {
+        this.filters.order_by = query.order_by;
+      }
+
+      if (query.status) {
+        this.filters.status = query.status;
+      }
+
+      if (query.search) {
+        this.filters.search = query.search;
+      }
+
+      if (query.page) {
+        this.currentPage = +query.page;
+      }
+    }
+
+    this.getTasks();
   },
   methods: {
+    setSearchParam(key, value){
+      this.searchParams.set(key, value);
+      let newRelativePathQuery = window.location.pathname + '?' + this.searchParams.toString();
+      history.pushState(null, '', newRelativePathQuery);
+    },
     getDefaultFilters () {
       return {
         'order_by': 'created_at_desc',
@@ -171,7 +206,7 @@ export default {
       }
 
       if (this.currentPage) {
-        url = `${url}&page=${ this.currentPage }`;
+        url = `${ url }&page=${ this.currentPage }`;
       }
 
       http.get(url)
