@@ -19,7 +19,6 @@ Install composer packages
 
 ```
 composer install
-composer du
 ```
 
 Setting up connection to database, edit phinx.php and config.php files in root folder.
