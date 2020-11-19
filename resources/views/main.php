@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="formTaskContent">Суть задачи</label>
+                  <label for="formTaskContent">Описание задачи</label>
                   <div id="formTaskContent"></div>
                   <button
                      type="button"

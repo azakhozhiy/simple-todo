@@ -8,7 +8,7 @@
   <!-- Bootstrap CSS -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="<?php echo mix('/css/app.css') ?>">
-  <title>Todo list</title>
+  <title>Задачник для Unlimint</title>
 </head>
 <body>
 <div id="app">
