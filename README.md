@@ -1,4 +1,4 @@
-# Installation
+# Simple TODO application
 
 Requirements: 
 - PostgreSQL
@@ -9,6 +9,8 @@ PHP extensions requirement:
 - ext-json
 - ext-gd
 - ext-mbstring
+
+## Installation
 
 Clone repo.
 ```
@@ -21,7 +23,13 @@ Install composer packages
 composer install
 ```
 
-Setting up connection to database, edit phinx.php and config.php files in root folder.
+Setting up connection to database, copy base config phinx and app config. 
+
+Don't forget to set your values for connecting to the database.
+```
+cat config.example.php >> config.php
+cat phinx.example.php >> phinx.php
+```
 
 ```php
 <?php
@@ -39,6 +47,11 @@ return [
         'db_password' => 'secret',
     ],
 ];
+```
+
+Start migrations
+```
+vendor/bin/phinx migrate
 ```
 
 Install NPM dependencies
