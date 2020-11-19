@@ -16,6 +16,15 @@ class UserRepository extends CoreRepository
         return (new User());
     }
 
+    public function getOneById(int $id)
+    {
+        $user = parent::getOneById($id);
+
+        unset($user['password']);
+
+        return $user;
+    }
+
     public function findByLoginAndPassword(string $login, string $hash)
     {
         $table = $this->getModel()->getTable();

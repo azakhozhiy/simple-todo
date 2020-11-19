@@ -47,5 +47,8 @@
 </div> <!-- close #app -->
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  window.user = <?php echo json_encode(auth()->user()); ?>
+</script>
 <script src="<?php echo mix('/js/app.js') ?>"></script>
 </html>

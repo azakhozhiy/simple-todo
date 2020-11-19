@@ -18,6 +18,16 @@
   }
 }
 
+.task-page {
+  &__form {
+    &__header {
+      display: flex;
+      align-content: center;
+      align-items: center;
+    }
+  }
+}
+
 .modal-task-preview {
 
   .modal-dialog {
@@ -31,32 +41,39 @@
     align-content: center;
     align-items: center;
   }
-  &--completed{
+
+  &--completed {
 
   }
 }
 
 .btn-icon {
-  padding:0;
+  padding: 0;
   line-height: normal;
   width: 25px;
   height: 25px;
   border-radius: 100%;
-  &--success{
+
+  &--success {
     color: #12b038;
-    &:hover{
+
+    &:hover {
       color: #09982a;
     }
   }
-  &--primary{
+
+  &--primary {
     color: #046ad6;
-    &:hover{
+
+    &:hover {
       color: #046AD6;
     }
   }
-  &--danger{
+
+  &--danger {
     color: #BF0318;
-    &:hover{
+
+    &:hover {
       color: #9f0516;
     }
   }

@@ -24,6 +24,12 @@ if (!function_exists('app')) {
     }
 }
 
+if(!function_exists('remove_query_param')){
+    function remove_query_param(string $url, string $param): string {
+        return preg_replace('/[?&]'.$param.'=[^&]+(&|$)/','$1',$url);
+    }
+}
+
 if (!function_exists('url')) {
     function url(string $url): string
     {

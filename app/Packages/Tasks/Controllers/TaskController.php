@@ -10,6 +10,7 @@ use App\Packages\Tasks\Managers\TaskManager;
 use App\Packages\Tasks\Models\Task;
 use App\Packages\Tasks\Repositories\TaskRepository;
 use Exception;
+use PDO;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,54 @@ class TaskController
         $this->taskManager = $taskManager;
     }
 
-    public function getContent(Request $request): JsonResponse
+    public function getList(Request $request): JsonResponse {
+        $order_by = ['id', 'desc'];
+        $order_by_method = $request->query->get('order_by');
+
+        $status = $request->query->get('status', null);
+        $search = $request->query->get('search', null);
+
+        if ($order_by_method === 'created_at_desc') {
+            $order_by = ['id', 'desc'];
+        } elseif ($order_by_method === 'created_at_asc') {
+            $order_by = ['id', 'asc'];
+        }
+        $where = [];
+
+        if ($status === 'completed') {
+            $where['completed'] = [
+                'column' => 'is_complete',
+                'operator' => '=',
+                'value' => true,
+                'type' => PDO::PARAM_BOOL,
+            ];
+        } elseif ($status === 'not_completed') {
+            $where['not_completed'] = [
+                'column' => 'is_complete',
+                'operator' => '=',
+                'value' => false,
+                'type' => PDO::PARAM_BOOL,
+            ];
+        }
+
+        if ($search) {
+            $where['search_email'] = [
+                'column' => 'email',
+                'operator' => 'ILIKE',
+                'value' => mb_strtolower($search),
+                'type' => PDO::PARAM_STR,
+                'or_column' => 'title',
+            ];
+        }
+
+        $base_url = url('?module=tasks&action=get');
+        $columns = ['id', 'title', 'is_complete', 'email', 'creator_id', 'picture_id'];
+        $tasks = $this->taskRepository->getList($request, 5, $base_url, $columns, $where, $order_by);
+
+        return jsonResponse($tasks->toArray());
+    }
+
+    public function getOne(Request $request): JsonResponse
     {
         $task_id = (int) $request->get('task_id');
 
@@ -41,7 +89,7 @@ class TaskController
             return jsonResponse(['error' => 'Task not found.']);
         }
 
-        return jsonResponse(['content' => $task['content']]);
+        return jsonResponse($this->taskRepository->loadRelations($task));
     }
 
     public function createOrUpdate(Request $request, FileManager $fileManager, Auth $auth): JsonResponse
@@ -53,6 +101,7 @@ class TaskController
         $content = $data->get('content', null);
         /** @var UploadedFile $picture */
         $picture = $request->files->get('picture');
+        $email = $data->get('email');
 
         // Edit action allowed only users
         if ($task_id && !$auth->userIsLogged()) {
@@ -60,7 +109,11 @@ class TaskController
         }
 
         if (!$title) {
-            return jsonResponse(['error' => 'Title reqired.'], 400);
+            return jsonResponse(['error' => 'Title required.'], 400);
+        }
+
+        if (!$email) {
+            return jsonResponse(['error' => 'Email required.'], 400);
         }
 
         $task = $task_id ? $this->taskRepository->getOneById($task_id) : null;
@@ -78,7 +131,7 @@ class TaskController
         try {
             $this->taskManager->getConnection()->beginTransaction();
 
-            $task_id = $this->taskManager->createOrUpdate($task_id, $creator_id, $title, $name, $content);
+            $task_id = $this->taskManager->createOrUpdate($task_id, $creator_id, $title, $name, $email, $content);
 
             $task = [
                 'id' => $task_id,

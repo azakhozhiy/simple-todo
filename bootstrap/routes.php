@@ -53,8 +53,12 @@ return [
                 'method' => 'toggleCompleted',
                 'method_type' => Router::POST,
             ],
-            'getContent' => [
-                'method' => 'getContent',
+            'get' => [
+                'method' => 'getList',
+                'method_type' => Router::GET,
+            ],
+            'getOne' => [
+                'method' => 'getOne',
                 'method_type' => Router::GET,
             ],
         ],

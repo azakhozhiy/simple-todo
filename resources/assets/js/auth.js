@@ -1,5 +1,5 @@
-import http from '../http';
-import { inputCheckCountSymbols, inputIsNotEmpty, registerInputWatcher } from '../helpers/form';
+import http from './http';
+import { inputCheckCountSymbols, inputIsNotEmpty, registerInputWatcher } from './helpers/form';
 
 export default {
   install () {

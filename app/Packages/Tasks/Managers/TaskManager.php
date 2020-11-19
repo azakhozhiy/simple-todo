@@ -20,6 +20,7 @@ class TaskManager extends CoreManager
         ?int $creator_id,
         string $title,
         string $name,
+        string $email,
         ?string $content
     ): int {
         return $this->record(static function (PDO $db, string $table) use (
@@ -27,24 +28,26 @@ class TaskManager extends CoreManager
             $creator_id,
             $name,
             $title,
-            $content
+            $content,
+            $email
         ) {
             if ($task_id) {
-                $sql = "UPDATE $table SET creator_id=:creator_id, title=:title, content=:content, name=:task_name WHERE id=:id";
+                $sql = "UPDATE $table SET  name=:task_name, title=:title, email=:email, content=:content WHERE id=:id";
             } else {
-                $sql = "INSERT INTO $table (title, content, name, creator_id) VALUES (:title, :content, :task_name, :creator_id)";
+                $sql = "INSERT INTO $table (name, title,email, content, creator_id) VALUES (:task_name, :title, :email, :content, :creator_id)";
             }
 
             $query = $db->prepare($sql);
+            $query->bindValue(':task_name', $name, PDO::PARAM_STR);
+            $query->bindValue(':title', $title, PDO::PARAM_STR);
+            $query->bindValue(':email', $email, PDO::PARAM_STR);
+            $query->bindValue(':content', $content, PDO::PARAM_STR);
 
             if ($task_id) {
-                $query->bindParam('id', $id, PDO::PARAM_INT);
+                $query->bindValue(':id', $task_id, PDO::PARAM_INT);
+            } else {
+                $query->bindValue(':creator_id', $creator_id, PDO::PARAM_INT);
             }
-
-            $query->bindParam('task_name', $name);
-            $query->bindParam('creator_id', $creator_id);
-            $query->bindParam('title', $title, PDO::PARAM_STR);
-            $query->bindParam('content', $content, PDO::PARAM_STR);
 
             $query->execute();
 
@@ -67,8 +70,9 @@ class TaskManager extends CoreManager
         });
     }
 
-    public function associatePicture(int $task_id, int $picture_id): void{
-        $this->record(static function (PDO $db, string $table) use ($picture_id, $task_id){
+    public function associatePicture(int $task_id, int $picture_id): void
+    {
+        $this->record(static function (PDO $db, string $table) use ($picture_id, $task_id) {
             $sql = "UPDATE $table SET picture_id=:picture_id WHERE id=:id";
             $query = $db->prepare($sql);
             $query->bindParam('picture_id', $picture_id);
