@@ -6,8 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NotFoundController
 {
-    public function show()
+    public function show(): Response
     {
-        return new Response(view('404', [], false));
+        return response(view('404', [], false));
     }
 }
