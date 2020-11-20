@@ -10,6 +10,6 @@ class IndexController
 {
     public function index(): Response
     {
-        return new Response(view('main'));
+        return response(view('main'));
     }
 }
